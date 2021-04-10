@@ -1,0 +1,87 @@
+C51 COMPILER V9.60.0.0   TIMER                                                             12/16/2020 12:57:09 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE TIMER
+OBJECT MODULE PLACED IN ..\hex\timer.obj
+COMPILER INVOKED BY: E:\Keil\Keil_v5\C51\BIN\C51.EXE ..\SCR\timer.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\SCR) DEBUG 
+                    -OBJECTEXTEND PRINT(.\timer.lst) TABS(2) OBJECT(..\hex\timer.obj)
+
+line level    source
+
+   1          #include "timer.h"
+   2          uint8 flag=0;
+   3          uint16 cnt=0;
+   4          uint16 min=0;
+   5          #define T1MS (65536-FOSC/1000)      //1T模式
+   6          //#define T1MS (65536-FOSC/12/1000) //12T模式
+   7          
+   8          #define T38_4KHz (256-18432000/38400/2)         //1T
+   9          //#define T38_4KHz (256-18432000/12/38400/2)    //12T
+  10          
+  11          void Timer0_INIT(void)
+  12          {
+  13   1          AUXR |= 0x80;                   //定时器0为1T模式
+  14   1      //  AUXR &= 0x7f;                   //定时器0为12T模式
+  15   1      
+  16   1          TMOD = 0x00;                    //设置定时器为模式0(16位自动重装载)
+  17   1          TL0 = T1MS;                     //初始化计时值
+  18   1          TH0 = T1MS >> 8;
+  19   1          TR0 = 1;                        //定时器0开始计时
+  20   1          ET0 = 1;                        //使能定时器0中断
+  21   1          EA = 1;
+  22   1      }
+  23            
+  24          /* Timer0 interrupt routine */
+  25          void tm0_isr() interrupt 1 using 1   //定时1ms
+  26          {   
+  27   1        
+  28   1          Check_Charge();   //不断检查充电接口，是否充满电
+  29   1          cnt++;
+  30   1          if(cnt>=60000)    //1分钟
+  31   1          { 
+  32   2            cnt = 0;
+  33   2            min++;
+  34   2          }
+  35   1          if(min>=0&&min<5)
+  36   1          { 
+  37   2            flag=1;
+  38   2          }
+  39   1          if(min>=5&&min<30)
+  40   1          { 
+  41   2            flag=0;
+  42   2                
+  43   2          }
+  44   1          if(min==30)
+  45   1          { //flag=0;
+  46   2            min = 0;
+  47   2            CheckVBAT();
+  48   2          }
+  49   1      
+  50   1        if             (Charge==2)  Workflag=7;//插着插头并且完全充满电了
+  51   1        if((Vflag==3)&&(Charge==1)) Workflag=6; //插着插头并且几乎充满了
+  52   1        if((Vflag==2)&&(Charge==1)) Workflag=5; //插着插头并且电有一半
+  53   1        if((Vflag==1)&&(Charge==1)) Workflag=4; //插着插头并且没有电了
+  54   1        if((Vflag==3)&&(Charge==0)) Workflag=3; //没插电，但是有很多的电
+C51 COMPILER V9.60.0.0   TIMER                                                             12/16/2020 12:57:09 PAGE 2   
+
+  55   1        if((Vflag==2)&&(Charge==0)) Workflag=2; //没插电，有一半的电
+  56   1        if((Vflag==1)&&(Charge==0)) Workflag=1; //没插电，已经没电了*/
+  57   1          
+  58   1        
+  59   1      }
+  60          
+  61          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    311    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      5    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

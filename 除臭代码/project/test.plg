@@ -1,0 +1,117 @@
+<html>
+<body>
+<pre>
+<h1>礦ision Build Log</h1>
+<h2>Project:</h2>
+G:\淘宝资料\PCB\元件\开发板\STC15W4K32S4\测试软件\project\test.uvproj
+Project File Date:  08/09/2018
+
+<h2>Output:</h2>
+Build target 'Target 1'
+compiling IntProcess.c...
+compiling main.c...
+..\SCR\MAIN.C(75): warning C280: 'i': unreferenced local variable
+compiling timer.c...
+compiling UART.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?TIMER
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER2_INIT?UART
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_SEND_BYTE?UART
+Program Size: data=39.3 xdata=0 code=400
+"test" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+compiling IntProcess.c...
+compiling main.c...
+..\SCR\MAIN.C(75): warning C280: 'i': unreferenced local variable
+compiling timer.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?TIMER
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER2_INIT?UART
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_SEND_BYTE?UART
+Program Size: data=39.3 xdata=0 code=400
+"test" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?TIMER
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER2_INIT?UART
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_SEND_BYTE?UART
+Program Size: data=39.3 xdata=0 code=400
+"test" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?TIMER
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER2_INIT?UART
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_SEND_BYTE?UART
+Program Size: data=39.3 xdata=0 code=400
+"test" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?TIMER
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER2_INIT?UART
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_SEND_BYTE?UART
+Program Size: data=39.3 xdata=0 code=400
+creating hex file from "test"...
+"test" - 0 Error(s), 3 Warning(s).
+Build target 'Target 1'
+compiling IntProcess.c...
+compiling main.c...
+..\SCR\MAIN.C(75): warning C280: 'i': unreferenced local variable
+compiling timer.c...
+compiling UART.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?TIMER
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER2_INIT?UART
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_SEND_BYTE?UART
+Program Size: data=39.3 xdata=0 code=400
+creating hex file from "..\hex\test"...
+"..\hex\test" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+compiling IntProcess.c...
+compiling main.c...
+..\SCR\MAIN.C(75): warning C280: 'i': unreferenced local variable
+compiling timer.c...
+compiling UART.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?TIMER
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER2_INIT?UART
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_SEND_BYTE?UART
+Program Size: data=9.3 xdata=30 code=474
+creating hex file from "..\hex\test"...
+"..\hex\test" - 0 Error(s), 4 Warning(s).
+Build target 'Target 1'
+compiling IntProcess.c...
+compiling main.c...
+..\SCR\MAIN.C(75): warning C280: 'i': unreferenced local variable
+compiling timer.c...
+compiling UART.c...
+linking...
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_DELAY_MS?TIMER
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?TIMER2_INIT?UART
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_UART_SEND_BYTE?UART
+Program Size: data=9.3 xdata=30 code=474
+creating hex file from "..\hex\test"...
+"..\hex\test" - 0 Error(s), 4 Warning(s).

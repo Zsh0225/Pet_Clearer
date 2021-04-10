@@ -1,0 +1,207 @@
+C51 COMPILER V9.60.0.0   MAIN                                                              12/16/2020 12:57:09 PAGE 1   
+
+
+C51 COMPILER V9.60.0.0, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\hex\main.obj
+COMPILER INVOKED BY: E:\Keil\Keil_v5\C51\BIN\C51.EXE ..\SCR\main.c LARGE OPTIMIZE(8,SPEED) BROWSE INCDIR(..\SCR) DEBUG O
+                    -BJECTEXTEND PRINT(.\main.lst) TABS(2) OBJECT(..\hex\main.obj)
+
+line level    source
+
+   1          #include "config.h"
+   2          uint8 Vflag=0;
+   3          uint8 Charge=0;
+   4          uint8 Workflag=0;
+   5          uint8 Fsnsflag=0;
+   6          uint8 H=0;
+   7          uint8 ChargeFlag=0;
+   8          /***************************************************************/
+   9          /*函数名：void IO_INIT(void)                     */
+  10          /*功能：IO口初始化                                         */
+  11          /*备注：                             */
+  12          /***************************************************************/
+  13          void IO_INIT(void)
+  14          {
+  15   1          P0M0 = 0x00;
+  16   1          P0M1 = 0x00;
+  17   1          P1M0 = 0x00;
+  18   1          P1M1 = 0x00;
+  19   1          P2M0 = 0x00;
+  20   1          P2M1 = 0x00;
+  21   1          P3M0 = 0x00;
+  22   1          P3M1 = 0x00;
+  23   1          P4M0 = 0x00;
+  24   1          P4M1 = 0x00;
+  25   1          P5M0 = 0x00;
+  26   1          P5M1 = 0x00;
+  27   1          P6M0 = 0x00;
+  28   1          P6M1 = 0x00;
+  29   1          P7M0 = 0x00;
+  30   1          P7M1 = 0x00;  
+  31   1      }
+  32          
+  33          /***************************************************************/
+  34          /*函数名：void SysInit(void)                     */
+  35          /*功能：系统初始化，配置系统                               */
+  36          /*备注：                             */
+  37          /***************************************************************/
+  38          void SysInit(void)
+  39          {
+  40   1          IO_INIT();//IO口初始化
+  41   1          P3M0=0x00;
+  42   1          P3M1=0x08;
+  43   1          ADCCFG = 0x0f; 
+  44   1          ADC_CONTR = 0x83;
+  45   1          CheckVBAT();
+  46   1          Check_Charge();
+  47   1          Timer0_INIT();   //定时器0初始化
+  48   1      }
+  49          
+  50          void Work(void)
+  51          {
+  52   1      if(P32==1&&flag==1)
+  53   1        {
+  54   2          P55 = 0;
+C51 COMPILER V9.60.0.0   MAIN                                                              12/16/2020 12:57:09 PAGE 2   
+
+  55   2          min = 5;
+  56   2          cnt = 0;
+  57   2          P31=1;
+  58   2        }
+  59   1        if(P32==0&&flag==1)
+  60   1        {
+  61   2          P55=1;
+  62   2          P31=1;  
+  63   2        } 
+  64   1        if(P32==0&&flag==0)
+  65   1        {
+  66   2          P55=0;
+  67   2          P31=1;
+  68   2        }   
+  69   1      }
+  70          
+  71          
+  72          
+  73          //是否插线充电中
+  74          void Check_Charge(void)
+  75          {
+  76   1          if(P30==0)   // 此处值为所选电池，充电几乎充满进入涓流充电,视为满电  //
+  77   1          {
+  78   2            Charge=2;          //此时处于充满但任插电状态，蓝灯不可控制会亮;
+  79   2          }
+  80   1          if(P54==0)                                    //
+  81   1          {
+  82   2            Charge=1;          //此时处于充电状态，蓝灯不可控灭，可以控制红灯
+  83   2          }
+  84   1          if((P30==1)&&(P54==1))
+  85   1            Charge=0;          //此时已拔下插头，       
+  86   1      }
+  87          //检测电池电量
+  88          void CheckVBAT(void)
+  89          {
+  90   1          ADC_CONTR |= 0x40;
+  91   1          _nop_();   _nop_();   
+  92   1          while (!(ADC_CONTR & 0x20)); 
+  93   1          ADC_CONTR &= ~0x20; 
+  94   1          H = ADC_RES; 
+  95   1          if(H>=0xA0)       //4.15V
+  96   1            Vflag=3;
+  97   1          if((H<0xA0)&&(H>=130))  //  //4.15~3.68  0x8e
+  98   1            Vflag=2;
+  99   1          if(H<130)
+ 100   1            Vflag=1;                //<=3.68   10%电
+ 101   1      }
+ 102            
+ 103          
+ 104          
+ 105          void main()
+ 106          {uint16 i=0;
+ 107   1          SysInit();    //系统初始化  
+ 108   1        //Uart1_init();
+ 109   1        while(1)
+ 110   1        { 
+ 111   2          while((Workflag==7)||(Workflag==6)||(Workflag==5)||(Workflag==4)) //插着插头时
+ 112   2          { 
+ 113   3            P55 = 0;
+ 114   3            if(Workflag==7)               //插着插头并且完全充满电了
+ 115   3            { 
+ 116   4              P31=1;    //将灯关闭，蓝灯自亮
+C51 COMPILER V9.60.0.0   MAIN                                                              12/16/2020 12:57:09 PAGE 3   
+
+ 117   4              P55=0;
+ 118   4              ChargeFlag=1;
+ 119   4              while(ChargeFlag==1)
+ 120   4              {
+ 121   5                P30=0;
+ 122   5                Delay_N100ms(1);
+ 123   5                P30=1;
+ 124   5                i=100;
+ 125   5                while(i--)
+ 126   5                  _nop_();
+ 127   5                if(Charge==0)
+ 128   5                {
+ 129   6                  ChargeFlag=0;
+ 130   6                }
+ 131   5              } 
+ 132   4            }
+ 133   3            if(Workflag==6)               //插着插头并且几乎充满了  
+ 134   3            {
+ 135   4              P31=0;                      //将灯常亮
+ 136   4              P55 = 0;
+ 137   4            }
+ 138   3            if(Workflag==5)               //插着插头并且电有一半
+ 139   3            {
+ 140   4              P31=0;                      //将灯常量
+ 141   4              P55=0;
+ 142   4            }
+ 143   3            if(Workflag==4)               //插着插头并且没有电了
+ 144   3            {
+ 145   4              P31=0;                      //将灯常量
+ 146   4              P55 = 0;
+ 147   4            }
+ 148   3              P55 = 0;  
+ 149   3              
+ 150   3          }     
+ 151   2        
+ 152   2        while((Workflag==3)||(Workflag==2)||(Workflag==1)) 
+ 153   2          { 
+ 154   3            if(Workflag==3)               //没插电，但是有很多的电
+ 155   3            {
+ 156   4              Work();
+ 157   4            }
+ 158   3            if((Workflag==2)&&(Fsnsflag==0))                //没插电，有一半的电
+ 159   3            {
+ 160   4              Work();
+ 161   4            }       
+ 162   3            if(Workflag==1)           //没插电，已经没电了
+ 163   3            {
+ 164   4              P31=0;                      //将灯常亮，关闭风扇
+ 165   4              P55=0;
+ 166   4              Fsnsflag=1; 
+ 167   4              while(Fsnsflag)
+ 168   4              {
+ 169   5                if((Charge==1)||(Charge==2))
+ 170   5                {
+ 171   6                  Fsnsflag=0;
+ 172   6                } 
+ 173   5              }
+ 174   4            }
+ 175   3          }
+ 176   2        }   
+ 177   1      }
+
+C51 COMPILER V9.60.0.0   MAIN                                                              12/16/2020 12:57:09 PAGE 4   
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    473    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =      6       2
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

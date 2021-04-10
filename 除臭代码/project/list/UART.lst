@@ -1,0 +1,119 @@
+C51 COMPILER V9.01   UART                                                                  08/09/2018 16:17:38 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE UART
+OBJECT MODULE PLACED IN ..\hex\UART.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\SCR\UART.c BROWSE INCDIR(..\SCR) DEBUG OBJECTEXTEND PRINT(.\list\UART.ls
+                    -t) OBJECT(..\hex\UART.obj)
+
+line level    source
+
+   1          #include "uart.h"
+   2          #include <STC89C51RC_RD_PLUS.h>
+   3          
+   4          #define uint8 unsigned char
+   5          #define uint16 unsigned int
+   6          
+   7          //uint8 dat;
+   8          //uint8 RxCnt;
+   9          //uint8 RxData[61];
+  10          //bit RxStartFlag;
+  11          //bit RxFlag;
+  12           
+  13          
+  14          void Timer2_init(void)
+  15          {
+  16   1      //      TCON=0x15;    //0x15;   //使能T0/EX0/EX1/外部中断触发方式为边沿触发。
+  17   1        PCON=0x80;    //SMOD=1，波特率加倍。SMOD=0，波特率不加倍。
+  18   1        T2CON=0x34;   //波特率收发使用相同的发生率,开T2时钟。
+  19   1        T2MOD=0x00;
+  20   1        SCON=0x50;    //设定串口模式为：模式1，置REN接收使能,T2作16位串行波特率发生器，自动重装
+  21   1       
+  22   1      //    * MCU工作时钟Fclk = 11.0592MHz     * 一个机器周期Tm = 12/11.0592us = 1.085us，(12个振荡脉冲） 
+  23   1      //    * T1初值 = 0x10000 - Fclk/(32*BaudRate)，即0xFFDC
+  24   1        RCAP2L=0xDC;  //波特率9600，11.0592M晶振，12时钟模式。//T2作为串口波特率时钟，设置T2初始值：
+  25   1        RCAP2H=0xFF;  
+  26   1        TL2=0xDC;             //BUAD = 11059200/32*(65536-X)=65536-11059200/9600/32  FF DC
+  27   1        TH2=0xFF;
+  28   1        ES = 1;
+  29   1      //  EA = 1;
+  30   1      }
+  31          
+  32          ////*--------------------------------------------------------------
+  33          ////  UART初始化
+  34          //// 波特率：9600
+  35          ////---------------------------------------------------------------
+  36          //void Uart_init(void)
+  37          //{
+  38          //    ET1=0;
+  39          //    //TMOD = 0x21;        // 定时器1工作在方式2（自动重装）
+  40          //    SCON = 0x50;        // 10位uart，允许串行接受
+  41          //
+  42          //    TH1 = 0xE8;
+  43          //    TL1 = 0xE8;                       //波特率9600
+  44          //
+  45          //    TR1 = 1;
+  46          //}
+  47          
+  48          /**
+  49           * UART 发送一字节
+  50          */
+  51          void UART_Send_Byte(uint8 dat)
+  52          {
+  53   1              SBUF = dat;
+  54   1              while (TI == 0);
+C51 COMPILER V9.01   UART                                                                  08/09/2018 16:17:38 PAGE 2   
+
+  55   1              TI = 0;
+  56   1      }
+  57          
+  58          //
+  59          //void interrupt_uart() interrupt 4
+  60          //{
+  61          ////    if(RI)
+  62          ////    {       
+  63          ////            RI=0;
+  64          ////                    
+  65          ////            dat=SBUF;
+  66          ////            if(dat=='{')
+  67          ////            {
+  68          ////                    RxStartFlag=1;
+  69          ////                    RxCnt=0;
+  70          ////                    RxData[0]='{';
+  71          //////                  PassLed=~PassLed;
+  72          ////            //      FaultLed=1;
+  73          ////            }
+  74          //              else if(RxStartFlag)
+  75          //              {
+  76          //                      RxCnt++;
+  77          //                      RxData[RxCnt]=dat;
+  78          //                      if(RxCnt>61)
+  79          //                      {
+  80          //                              RxStartFlag=0;
+  81          //                              RxCnt=0;        
+  82          //                      }
+  83          //                      else if(dat=='}')
+  84          //                      {
+  85          //                      //      PassLed=1;
+  86          //                              RxFlag=1;
+  87          //                              RxStartFlag=0;
+  88          //                      //      RxCnt=0;
+  89          //                      }
+  90          //              }
+  91          //      
+  92          //    }
+  93          //}
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     35    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

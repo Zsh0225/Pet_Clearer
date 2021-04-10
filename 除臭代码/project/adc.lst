@@ -1,0 +1,129 @@
+C51 COMPILER V9.01   ADC                                                                   03/12/2019 14:02:01 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE ADC
+OBJECT MODULE PLACED IN ..\hex\adc.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\SCR\adc.c LARGE BROWSE INCDIR(..\SCR) DEBUG OBJECTEXTEND PRINT(.\adc.lst
+                    -) OBJECT(..\hex\adc.obj)
+
+line level    source
+
+   1          /*                        -- 渡河蚂蚁电子工作室 --                        */
+   2          /*
+   3          *   说    明: STC15W4K32S4 DEMO程序
+   4          *   开发平台: STC15W4K32S4     
+   5          *   淘宝网店: 
+   6          *
+   7          //  文件名：main.c                                                              
+   8          //  说明：供客户测试模块通信使用程序                                                                  
+   9          //  编写人员：Duhemayi                                                                   
+  10          //  编写日期：2018-09-16                                                               
+  11          //  程序维护：
+  12          //  维护记录：
+  13          //      版    本: V1.0
+  14          //                                                          
+  15          // 免责声明：该程序仅用于学习与交流 
+  16          // (c) Duhemayi Corporation. All rights reserved.     
+  17          ******************************************************************************/
+  18          #include "adc.h"
+  19          
+  20          #define     URMD    0           //0:使用定时器2作为波特率发生器
+  21                                          //1:使用定时器1的模式0(16位自动重载模式)作为波特率发生器
+  22                                          //2:使用定时器1的模式2(8位自动重载模式)作为波特率发生器
+  23          
+  24          
+  25          
+  26          #define ADC_POWER   0x80            //ADC电源控制位
+  27          #define ADC_FLAG    0x10            //ADC完成标志
+  28          #define ADC_START   0x08            //ADC起始控制位
+  29          #define ADC_SPEEDLL 0x00            //540个时钟
+  30          #define ADC_SPEEDL  0x20            //360个时钟
+  31          #define ADC_SPEEDH  0x40            //180个时钟
+  32          #define ADC_SPEEDHH 0x60            //90个时钟
+  33          
+  34          /*----------------------------
+  35          软件延时
+  36          ----------------------------*/
+  37          void Delay(WORD n)
+  38          {
+  39   1          WORD x;
+  40   1      
+  41   1          while (n--)
+  42   1          {
+  43   2              x = 5000;
+  44   2              while (x--);
+  45   2          }
+  46   1      }
+  47          
+  48          /*----------------------------
+  49          初始化ADC
+  50          ----------------------------*/
+  51          void InitADC(void)
+  52          {
+  53   1          P1ASF = 0xff;                   //设置P1口为AD口
+  54   1          ADC_RES = 0;                    //清除结果寄存器
+C51 COMPILER V9.01   ADC                                                                   03/12/2019 14:02:01 PAGE 2   
+
+  55   1          ADC_CONTR = ADC_POWER | ADC_SPEEDLL;
+  56   1          Delay(2);                       //ADC上电并延时
+  57   1      }
+  58          
+  59          /*----------------------------
+  60          读取ADC结果
+  61          ----------------------------*/
+  62          BYTE GetADCResult(BYTE ch)
+  63          {
+  64   1          ADC_CONTR = ADC_POWER | ADC_SPEEDLL | ch | ADC_START;
+  65   1          _nop_();                        //等待4个NOP
+  66   1          _nop_();
+  67   1          _nop_();
+  68   1          _nop_();
+  69   1          while (!(ADC_CONTR & ADC_FLAG));//等待ADC转换完成
+  70   1          ADC_CONTR &= ~ADC_FLAG;         //Close ADC
+  71   1      
+  72   1          return ADC_RES;                 //返回ADC结果
+  73   1      }
+  74          
+  75          /*----------------------------
+  76          发送ADC结果到PC
+  77          ----------------------------*/
+  78          void ShowResult(BYTE ch)
+  79          {
+  80   1          Uart1_SendData(ch);                   //显示通道号
+  81   1          Uart1_SendData(GetADCResult(ch));     //显示ADC高8位结果
+  82   1      
+  83   1      //    SendData(ADC_LOW2);           //显示低2位结果
+  84   1      }
+  85          
+  86          void ADC_play(void)
+  87          {
+  88   1          InitADC();                      //初始化ADC
+  89   1          while (1)
+  90   1          {
+  91   2              ShowResult(0);              //显示通道0
+  92   2              ShowResult(1);              //显示通道1
+  93   2              ShowResult(2);              //显示通道2
+  94   2              ShowResult(3);              //显示通道3
+  95   2              ShowResult(4);              //显示通道4
+  96   2              ShowResult(5);              //显示通道5
+  97   2              ShowResult(6);              //显示通道6
+  98   2              ShowResult(7);              //显示通道7
+  99   2          }
+ 100   1      }
+ 101          
+ 102          
+ 103          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    126    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----       1
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,6 @@
+".\IntProcess.obj",
+".\main.obj",
+".\timer.obj",
+".\UART.obj" 
+TO "test" 
+RAMSIZE(256) 

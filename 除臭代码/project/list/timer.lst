@@ -1,0 +1,107 @@
+C51 COMPILER V9.01   TIMER                                                                 08/09/2018 16:17:37 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE TIMER
+OBJECT MODULE PLACED IN ..\hex\timer.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\SCR\timer.c BROWSE INCDIR(..\SCR) DEBUG OBJECTEXTEND PRINT(.\list\timer.
+                    -lst) OBJECT(..\hex\timer.obj)
+
+line level    source
+
+   1          #include "timer.h"
+   2          
+   3          uint8 Rs232Timer=0;             //单位：100ms
+   4          uint8 Timer1s=0;
+   5          uint8 Timer100ms=0;
+   6          uint8 Timer2500us=0;
+   7          
+   8          bit w25msf;     //205ms标志
+   9          bit w100msf;//100ms标志
+  10          bit w1sf;   //1s标志
+  11          
+  12          void Timer0_Init(void)
+  13          {
+  14   1              TMOD|=0X01;        //0000 0001 T0工作于模式1
+  15   1              TH0=0xf7;               // 2.5ms=0.0025S=12*(65536-X)/11059200==>X=65536-0.0025*11059200/12=0xF700(Fosc=11059200)
+  16   1              TL0=0x00;       //T0用作2.5mm定时器
+  17   1              TR0=1;          //开定时器0
+  18   1              ET0=1;          //开定时器中断
+  19   1      }
+  20          
+  21          void Timer1_Init(void)
+  22          {
+  23   1          TMOD |= 0x50;        //0101 0000    TIMER1工作于计数器模式，模式1   16位计数器模式
+  24   1          TH1 = 0x00;
+  25   1          TL1 = 0x00;
+  26   1          TR1 = 1;             //关计数器1
+  27   1              ET1 = 1;        
+  28   1      }
+  29          
+  30          /***************************************************************/
+  31          /*                                                                                                                         */
+  32          /*                                                      延时1MS                                                    */
+  33          /*                                                                                                                         */
+  34          /***************************************************************/
+  35          void delay_1ms()
+  36          {
+  37   1              uint8 a=152;
+  38   1              while(a--);
+  39   1      }
+  40          
+  41          /***************************************************************/
+  42          /*                                                                                                                         */
+  43          /*                                                      延时N个 MS                                                 */
+  44          /*                                                                                                                         */
+  45          /***************************************************************/
+  46          void delay_ms(uint16 b)
+  47          {
+  48   1              uint16 c;
+  49   1              for(c=0;c<=b;c++)
+  50   1              {
+  51   2                      delay_1ms();
+  52   2              }       
+  53   1      }
+  54          
+C51 COMPILER V9.01   TIMER                                                                 08/09/2018 16:17:37 PAGE 2   
+
+  55          void Timer0(void) interrupt 1 //2.5ms一次中断
+  56          {
+  57   1              static uint8 i=40;      //定义j和i为静态存贮变量，即在程序运行期间，固定分配物理空间。而不是需要才分配。
+  58   1              static uint8 j=10;
+  59   1              TF0=0;
+  60   1              TH0=0xf7;
+  61   1              TL0=0x00;       
+  62   1              w25msf=1;
+  63   1              if(Timer2500us) Timer2500us--;
+  64   1              if(--i==0)
+  65   1              {
+  66   2                      i=40;
+  67   2                      if(Timer100ms) Timer100ms--;
+  68   2      
+  69   2                  w100msf=1;                         //100ms到标志位.
+  70   2                      if(Rs232Timer) Rs232Timer--;
+  71   2                      if(--j==0)
+  72   2                      {
+  73   3                              j=10;
+  74   3                              if(Timer1s) Timer1s--;
+  75   3                              w1sf=1;
+  76   3                      }
+  77   2              }
+  78   1      }
+  79          
+  80          
+  81          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    119    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      6    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =      3    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

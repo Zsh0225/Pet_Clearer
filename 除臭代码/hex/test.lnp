@@ -1,0 +1,10 @@
+"..\hex\IntProcess.obj",
+"..\hex\main.obj",
+"..\hex\timer.obj",
+"..\hex\UART.obj",
+"..\hex\delay.obj",
+"..\hex\readchipid.obj",
+"..\hex\pwm.obj" 
+TO "..\hex\test" 
+PRINT(".\test.m51") RAMSIZE(256) 
+DISABLEWARNING (16) 

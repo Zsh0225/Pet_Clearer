@@ -1,0 +1,125 @@
+C51 COMPILER V9.01   MAIN                                                                  08/09/2018 16:17:37 PAGE 1   
+
+
+C51 COMPILER V9.01, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN ..\hex\main.obj
+COMPILER INVOKED BY: C:\Keil\C51\BIN\C51.EXE ..\SCR\main.c BROWSE INCDIR(..\SCR) DEBUG OBJECTEXTEND PRINT(.\list\main.ls
+                    -t) OBJECT(..\hex\main.obj)
+
+line level    source
+
+   1          /********************************************************************/
+   2          /*                                                                  */
+   3          /* STC12C5A60S2最小系统测试程序                                     */
+   4          /*                                                                  */
+   5          /*                                                             　　 */
+   6          /*                                                                  */
+   7          /* 邮箱:                                                            */
+   8          /* 作者： duhemayi                                                  */
+   9          /* 时间： 2014-04-12                                                */
+  10          /* REV1.0                                                           */
+  11          /********************************************************************/
+  12          #include "config.h"
+  13          
+  14          uint16 AD,AD1,AD2,sum;
+  15          uint16 disp[5];
+  16          uint8 m;
+  17          
+  18          /***************************************************************/
+  19          /*函数名：void IO_INIT(void)                                                       */
+  20          /*功能：IO口初始化                                                 */
+  21          /*备注：                                                                                                           */
+  22          /***************************************************************/
+  23          void IO_INIT(void)
+  24          {
+  25   1              P1 = 0XFF;
+  26   1              P0 = 0XFF;
+  27   1              P2 = 0X00;
+  28   1              P3 = 0XFF;
+  29   1              P4 = 0XFF;      
+  30   1      }
+  31          
+  32          /***************************************************************/
+  33          /*函数名：void SysInit(void)                                                       */
+  34          /*功能：系统初始化，配置系统                                       */
+  35          /*备注：                                                                                                           */
+  36          /***************************************************************/
+  37          void SysInit(void)
+  38          {
+  39   1              IO_INIT();//IO口初始化
+  40   1      
+  41   1      //      lcd1602_init();  //LCD1602液晶初始化
+  42   1      
+  43   1              Timer0_Init();   //定时器0初始化
+  44   1      
+  45   1              Timer1_Init();   //定时器1初始化
+  46   1      
+  47   1              InterruptInit(); //外部中断初始化
+  48   1      
+  49   1      //      AT24C04_I2C_init();//EEPROM初始化
+  50   1      
+  51   1      //      Timer2_init(); //串口初始化
+  52   1              
+  53   1              //      Clear_EEPROM_DAT();                //清除EEPROM中的内容
+  54   1      
+C51 COMPILER V9.01   MAIN                                                                  08/09/2018 16:17:37 PAGE 2   
+
+  55   1      //      InitEEPROMData();                  //读取EEPROM中存储的数据
+  56   1      
+  57   1      //      Start_AD7705();
+  58   1      }
+  59          
+  60          //void CheckEEPROM(void)
+  61          //{
+  62          //      AT24C04_write_byte(0X01,0X02);
+  63          //      Timer100ms=5;
+  64          //      while(Timer100ms);
+  65          //
+  66          //      m = AT24C04_read_byte(0x01);
+  67          //      if(m == 0x02)
+  68          //      {
+  69          //              w_string(3,0,"EEPROM read Success ");   
+  70          //      }       
+  71          //}
+  72           
+  73          void main()
+  74          {
+  75   1              uint8 i;
+  76   1      
+  77   1              SysInit();        //系统初始化
+  78   1                
+  79   1      
+  80   1              Timer100ms=10;
+  81   1              while(Timer100ms);
+  82   1      
+  83   1      //      CheckEEPROM();  //检查EEPROM 是否连接并准备好
+  84   1      //      Timer100ms=10;
+  85   1      //      while(Timer100ms);
+  86   1      
+  87   1      
+  88   1      //      w_string(3,0,"                    ");
+  89   1              while(1)
+  90   1              {
+  91   2                      LED = 1;
+  92   2                      Timer100ms=5;
+  93   2                      while(Timer100ms);
+  94   2                      LED = 0;
+  95   2                      Timer100ms=5;
+  96   2                      while(Timer100ms);
+  97   2              }       
+  98   1      }
+*** WARNING C280 IN LINE 75 OF ..\SCR\MAIN.C: 'i': unreferenced local variable
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     58    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     19       1
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
